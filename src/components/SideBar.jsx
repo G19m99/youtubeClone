@@ -6,8 +6,8 @@ import { Stack } from '@mui/material';
 const SideBar = ({selectedCategory, setSelectedCategory}) => {
   return (
     <Stack direction='row' sx={{
-      overflowY: 'aout',
-      height: { sx: 'auto', md: '95%', },
+      overflowY: 'auto',
+      height: { sx: 'auto', md: '85vh', },
       flexDirection: { md: 'column' }
     }}>
       {categories.map((cat) => (

@@ -5,7 +5,7 @@ export const BASE_URL = 'https://youtube-v31.p.rapidapi.com';
 const options = {
 	method: 'GET',
 	headers: {
-		'X-RapidAPI-Key': '7579baf141mshf52bb746ebfd1f9p1ff06ejsn019364df3f1e',
+		'X-RapidAPI-Key': process.env.REACT_APP_RAPID_API_KEY,
 		'X-RapidAPI-Host': 'youtube-v31.p.rapidapi.com'
 	}
 };
