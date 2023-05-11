@@ -7,7 +7,7 @@ const Videos = ({ videos, direction }) => {
 
   if (!videos?.length) return 'Loading...';
   return (
-    <Stack direction={direction || 'row'} flexWrap='wrap' justifyContent='flex-start' gap={2}>
+    <Stack sx={{ overflowY: 'auto' }} direction={direction || 'row'} flexWrap='wrap' justifyContent='flex-start' gap={2}>
       {videos.map((item, index) => (
         <Box key={index}>
           {item.id.videoId && <VideoCard video={item} />}
