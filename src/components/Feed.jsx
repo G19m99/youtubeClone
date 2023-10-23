@@ -6,11 +6,13 @@ import SideBar from "./SideBar";
 import Videos from "./Videos";
 import { fetchFromAPI, initialFeed } from "../utils/fetchFromApi";
 import { Link } from "@mui/material";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 const Feed = () => {
   const [selectedCategory, setSelectedCategory] = useState("New");
   const [videos, setVideos] = useState([]);
-  
+
   useEffect(() => {
     let timer;
     const fetchData = async () => {
@@ -38,7 +40,7 @@ const Feed = () => {
   }, [selectedCategory]);
   return (
     <Stack
-      sx={{ flexDirection: { sx: "column", md: "row" }, overflow: "auto" }}
+      sx={{ flexDirection: { sx: "column", md: "row" }, overflow: "none" }}
     >
       <Box
         sx={{
@@ -51,18 +53,38 @@ const Feed = () => {
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
-        <Link
-          href="https://www.google.com"
-          className="copyright"
-          variant="body2"
-          sx={{
-            mt: 1.5,
-            color: "#fff",
-            display: { xs: "none", md: "inline-block" },
-          }}
+        <Box
+          display={{ xs: "none", md: "flex" }}
+          justifyContent="center"
+          alignItems="center"
+          gap={2}
         >
-          view my portfolio
-        </Link>
+          <Typography color="white" marginTop={1}>Social:</Typography>
+          <Link
+            href="https://linkedin.com/in/gershon-menzer-8a93a5231"
+            className="copyright"
+            variant="body2"
+            sx={{
+              mt: 1.5,
+              color: "#fff",
+              display: { xs: "none", md: "inline-block" },
+            }}
+          >
+            <LinkedInIcon />
+          </Link>
+          <Link
+            href="https://github.com/G19m99"
+            className="copyright"
+            variant="body2"
+            sx={{
+              mt: 1.5,
+              color: "#fff",
+              display: { xs: "none", md: "inline-block" },
+            }}
+          >
+            <GitHubIcon />
+          </Link>
+        </Box>
       </Box>
       <Box p={2} sx={{ overflowY: "auto", height: "90vh", flex: 2 }}>
         <Typography
