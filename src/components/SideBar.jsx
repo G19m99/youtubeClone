@@ -2,8 +2,19 @@ import React from "react";
 import { categories } from "../utils/constants";
 import { Box, Button, Stack } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import AddCategoryModal from "./AddCategoryModal";
+import CategoryIcon from "@mui/icons-material/Category";
 
 const SideBar = ({ selectedCategory, setSelectedCategory }) => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleclose = (val) => {
+    //TODO: need to generate icon based on user input
+    if (typeof val === "string") {
+      categories.push({ name: val, icon: <CategoryIcon /> });
+    }
+    setOpen(false);
+  };
   return (
     <Box>
       <Button
@@ -14,7 +25,7 @@ const SideBar = ({ selectedCategory, setSelectedCategory }) => {
           justifyItems: "center",
         }}
         startIcon={<AddIcon />}
-        onClick={()=> console.log("click")}
+        onClick={() => setOpen(true)}
       >
         Add Category
       </Button>
@@ -52,6 +63,7 @@ const SideBar = ({ selectedCategory, setSelectedCategory }) => {
           </button>
         ))}
       </Stack>
+      {open && <AddCategoryModal open={open} handleClose={handleclose} />}
     </Box>
   );
 };
