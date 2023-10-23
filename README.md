@@ -7,8 +7,8 @@ A clone of the classic you tube site with added functionality where user can con
 ## Features
 
 - Fully optimized and responsive to all screen sizes
-- Can remove and add categories from quick search
 - A home page feed algorithm that generates a feed based on user saved categories
+- Can remove and add categories from quick search (in Development)
 - Fetch additional videos when get to end of page (in Development)
 
 
