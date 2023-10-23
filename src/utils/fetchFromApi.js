@@ -34,7 +34,7 @@ export const initialFeed = async () => {
   try {
     const promises = shuffledCategories.map(async (category) => {
       const response = await fetch(
-        `${BASE_URL}/search?part=snippet&q=${category.name}&maxResults=10`,
+        `${BASE_URL}/search?q=${category.name}&part=snippet%2Cid&order=date&maxResults=10`,
         options
       );
       const data = await response.json();
