@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -15,7 +15,7 @@ const Feed = () => {
   const observerTarget = useRef(null);
   const observer = useRef();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (selectedCategory === "New") {
       const data = await initialFeed();
       setVideos((videos) => [...videos, ...data]);
@@ -25,7 +25,7 @@ const Feed = () => {
       );
       setVideos((videos) => [...videos, ...data.items]);
     }
-  };
+  }, [selectedCategory]);
 
   useEffect(() => {
     let timer;
@@ -40,16 +40,8 @@ const Feed = () => {
     delayAPIRequest();
 
     return () => clearTimeout(timer);
-  }, [selectedCategory]);
+  }, [selectedCategory, fetchData]);
 
-  const handleObserver = (entities) => {
-    console.log("entities?", entities);
-    const target = entities[0];
-    if (target.isIntersecting) {
-      // Load more data
-      fetchData();
-    }
-  };
   useEffect(() => {
     const options = {
       root: null,
@@ -57,7 +49,11 @@ const Feed = () => {
       threshold: 0.5,
     };
 
-    observer.current = new IntersectionObserver(handleObserver, options);
+    observer.current = new IntersectionObserver((entities) => {
+      if (entities[0].isIntersecting) {
+        fetchData();
+      }
+    }, options);
     if (observerTarget.current) {
       observer.current.observe(observerTarget.current);
     }
@@ -65,7 +61,7 @@ const Feed = () => {
     return () => {
       observer.current.disconnect();
     };
-  }, [videos]);
+  }, [videos, fetchData]);
 
   return (
     <Stack
