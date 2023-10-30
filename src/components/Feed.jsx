@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -12,20 +12,23 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 const Feed = () => {
   const [selectedCategory, setSelectedCategory] = useState("New");
   const [videos, setVideos] = useState([]);
+  const observerTarget = useRef(null);
+  const observer = useRef();
+
+  const fetchData = async () => {
+    if (selectedCategory === "New") {
+      const data = await initialFeed();
+      setVideos((videos) => [...videos, ...data]);
+    } else {
+      const data = await fetchFromAPI(
+        `search?part=snippet&q=${selectedCategory}`
+      );
+      setVideos((videos) => [...videos, ...data.items]);
+    }
+  };
 
   useEffect(() => {
     let timer;
-    const fetchData = async () => {
-      if (selectedCategory === "New") {
-        const data = await initialFeed();
-        setVideos(data);
-      } else {
-        const data = await fetchFromAPI(
-          `search?part=snippet&q=${selectedCategory}`
-        );
-        setVideos(data.items);
-      }
-    };
     //we need a timeout to make sure the api is not requested again and exeed the 5 per second limit
     const delayAPIRequest = () => {
       clearTimeout(timer);
@@ -33,11 +36,37 @@ const Feed = () => {
         fetchData();
       }, 1000);
     };
-
+    setVideos([]);
     delayAPIRequest();
 
     return () => clearTimeout(timer);
   }, [selectedCategory]);
+
+  const handleObserver = (entities) => {
+    console.log("entities?", entities);
+    const target = entities[0];
+    if (target.isIntersecting) {
+      // Load more data
+      fetchData();
+    }
+  };
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.5,
+    };
+
+    observer.current = new IntersectionObserver(handleObserver, options);
+    if (observerTarget.current) {
+      observer.current.observe(observerTarget.current);
+    }
+
+    return () => {
+      observer.current.disconnect();
+    };
+  }, [videos]);
+
   return (
     <Stack
       sx={{ flexDirection: { sx: "column", md: "row" }, overflow: "none" }}
@@ -59,7 +88,9 @@ const Feed = () => {
           alignItems="center"
           gap={2}
         >
-          <Typography color="white" marginTop={1}>Social:</Typography>
+          <Typography color="white" marginTop={1}>
+            Social:
+          </Typography>
           <Link
             href="https://linkedin.com/in/gershon-menzer-8a93a5231"
             className="copyright"
@@ -96,7 +127,7 @@ const Feed = () => {
           {selectedCategory}
           <span style={{ color: "#F31503" }}>Videos</span>
         </Typography>
-        <Videos videos={videos} />
+        <Videos videos={videos} observerRef={observerTarget} />
       </Box>
     </Stack>
   );
