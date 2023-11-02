@@ -7,7 +7,7 @@ A feature-rich YouTube clone with enhanced category control for quick searches. 
 - Fully optimized and responsive to all screen sizes
 - Can remove and add categories from quick search
 - A home page feed algorithm that generates a feed based on user saved categories
-- Fetch additional videos when get to end of page (in Development)
+- Fetch additional videos when get to end of page
 
 ## Demo
 
